@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - TheLittleDev</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --dark: #111827;
+            --darker: #0f172a;
+            --light: #f3f4f6;
+            --accent: #8b5cf6;
+            --gradient-1: linear-gradient(90deg, #3b82f6, #10b981, #8b5cf6);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--darker);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--darker) 0%, #1e1b4b 50%, var(--darker) 100%);
+            background-size: 400% 400%;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 text-center">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl max-w-md mx-auto">
+            <div class="text-yellow-400 text-6xl mb-6">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <h1 class="text-3xl font-bold mb-4">Payment Cancelled</h1>
+            <p class="text-gray-300 mb-8">Your payment was cancelled. If you experienced any issues, please try again or contact us for assistance.</p>
+            
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+                <a href="/" class="btn-primary inline-block px-6 py-3 rounded-lg text-white font-medium">
+                    <i class="fas fa-home mr-2"></i> Return to Homepage
+                </a>
+                <a href="/#donate" class="bg-gray-700 hover:bg-gray-600 transition-colors inline-block px-6 py-3 rounded-lg text-white font-medium">
+                    <i class="fas fa-redo mr-2"></i> Try Again
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

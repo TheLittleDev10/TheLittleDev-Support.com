@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheLittleDev - Support</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Added GSAP and THREE.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <!-- Payment Integration Scripts -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=Adbvm5kwiqTuQZaYX5F_EqsNlSPgvrS7lrlWnMbmXG23zYX3wKu8Ac8BYJ1Kq3gvGyzyxDQdMV4S6MY7&currency=USD"></script>
+    <script src="public/js/payments.js"></script>
+    <script src="public/js/payment-modal.js"></script>
+    <script>
+    // Redirect to Stripe payment link on button click
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkoutButton = document.getElementById('checkout-button');
+        if (checkoutButton) {
+            checkoutButton.addEventListener('click', function () {
+                window.location.href = 'https://donate.stripe.com/test_cN2aHH0x8e8N9mo000';
+            });
+        }
+    });
+
+    function showSuccessMessage(message) {
+        // Close the payment modal
+        document.getElementById('payment-modal').classList.add('hidden');
+        // You can implement a better success message UI here
+        alert(message);
+    }
+    </script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #10b981;
+            --dark: #111827;
+            --darker: #0f172a;
+            --light: #f3f4f6;
+            --accent: #8b5cf6;
+            --gradient-1: linear-gradient(90deg, #3b82f6, #10b981, #8b5cf6);
+            --gradient-2: linear-gradient(90deg, #8b5cf6, #ec4899, #f59e0b);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--darker);
+            color: white;
+            overflow-x: hidden;
+            transition: background-position 0.5s ease;
+            background: linear-gradient(135deg, var(--darker) 0%, #1e1b4b 50%, var(--darker) 100%);
+            background-size: 400% 400%;
+        }
+        
+        .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-text-alt {
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 3D Card Transformations */
+        .card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .card-content {
+            transform-style: preserve-3d;
+        }
+        
+        .card-content > * {
+            transform: translateZ(10px);
+        }
+        
+        /* 3D Buttons */
+        .btn-primary, .btn-secondary {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px) scale(1.02) translateZ(5px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            z-index: -1;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 5%;
+            width: 90%;
+            height: 10px;
+            background: var(--primary);
+            filter: blur(10px);
+            opacity: 0.5;
+            z-index: -2;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover::after {
+            opacity: 0.8;
+            filter: blur(15px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, var(--secondary), #059669);
+        }
+        
+        /* Hero Section 3D Elements and Parallax */
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .hero-shape {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0));
+            filter: blur(50px);
+            z-index: -1;
+            transform: translateZ(-50px);
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        
+        .layer-1 {
+            transform: translateZ(-100px) scale(1.5);
+        }
+        
+        .layer-2 {
+            transform: translateZ(-50px) scale(1.25);
+        }
+        
+        .layer-3 {
+            transform: translateZ(0);
+        }
+        
+        /* 3D Logo Animation */
+        
+        
+        @keyframes logo-rotate {
+            0% {
+                transform: rotateX(0) rotateY(0);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+        
+        /* Progress Bar Animation */
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .progress-glow {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            filter: blur(5px);
+            opacity: 0.8;
+        }
+        
+        /* Scroll-triggered Animation Classes */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-slide-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-slide-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-slide-left.active, .reveal-slide-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .animate-delay-1 { transition-delay: 0.2s; }
+        .animate-delay-2 { transition-delay: 0.4s; }
+        .animate-delay-3 { transition-delay: 0.6s; }
+        
+        /* Enhanced Tier Cards with 3D effects */
+        .tier-card {
+            transition: all 0.4s;
+            border: 2px solid transparent;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .tier-card .tier-content {
+            transform-style: preserve-3d;
+            transition: transform 0.4s;
+        }
+        
+        .tier-card:hover .tier-content {
+            transform: translateZ(20px);
+        }
+        
+        .tier-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.03) rotateX(5deg) rotateY(5deg);
+            box-shadow: 
+                0 20px 30px rgba(59, 130, 246, 0.2),
+                0 0 0 1px rgba(59, 130, 246, 0.1);
+        }
+        
+        .tier-card.popular {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .tier-card.popular:hover {
+            box-shadow: 
+                0 30px 40px rgba(139, 92, 246, 0.4),
+                0 0 0 1px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Animated Blobs */
+        .blob {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2), rgba(16, 185, 129, 0.1));
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            filter: blur(30px);
+            z-index: -1;
+            animation: blob-animation 20s infinite alternate;
+            will-change: transform, border-radius;
+            transform: translate3d(0, 0, 0);
+        }
+        
+        @keyframes blob-animation {
+            0% {
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                border-radius: 70% 30% 50% 50% / 30% 60% 40% 40%;
+                transform: translate(-20px, 20px) scale(1.1);
+            }
+            50% {
+                border-radius: 30% 60% 40% 70% / 50% 60% 30% 40%;
+                transform: translate(20px, 0) scale(0.9);
+            }
+            75% {
+                border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%;
+                transform: translate(0, -20px) scale(1.05);
+            }
+            100% {
+                border-radius: 60% 40% 30% 70% / 40% 40% 60% 50%;
+                transform: translate(0, 0) scale(1);
+            }
+        }
+        
+        /* Glowing Border with Enhanced Animation */
+        .glow-border {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 14px;
+            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary), var(--primary));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: glow 6s ease infinite;
+            filter: blur(2px);
+        }
+        
+        @keyframes glow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Enhanced Toggle Switch */
+        .toggle-checkbox {
+            height: 0;
+            width: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+        
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            position: relative;
+            transition: background-color 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .toggle-label .toggle-button {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            border-radius: 45px;
+            transition: 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            background: #fff;
+            box-shadow: 0 0 2px 0 rgba(10, 10, 10, 0.29);
+        }
+        
+        .toggle-checkbox:checked + .toggle-label {
+            background: var(--primary);
+        }
+        
+        .toggle-checkbox:checked + .toggle-label .toggle-button {
+            left: calc(100% - 3px);
+            transform: translateX(-100%);
+        }
+        
+        /* Enhanced Floating Particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float-up 15s infinite linear;
+            will-change: transform, opacity;
+            transform: translate3d(0, 0, 0);
+        }
+        
+        .particle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(59, 130, 246, 0.3);
+            opacity: 0.3;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--tx)) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Sticky Navigation */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(0px);
+            transform: translateY(-100%);
+        }
+        
+        .sticky-nav.visible {
+            transform: translateY(0);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animated Counters */
+        .counter-value {
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* 3D Project Cards */
+        .project-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.5s;
+        }
+        
+        .project-card:hover {
+            transform: rotateY(10deg) rotateX(5deg);
+        }
+        
+        .project-card:hover .project-icon {
+            transform: translateZ(30px) scale(1.2);
+        }
+        
+        .project-icon {
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+        
+        /* Three.js Canvas Container */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.5;
+        }
+        
+        /* Added scroll-triggered reveal sections */
+        .reveal-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* For mobile responsiveness */
+        @media (max-width: 768px) {
+            .logo-3d-container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo-right, .logo-left {
+                width: 30px;
+                left: 25px;
+            }
+            
+            .logo-top, .logo-bottom {
+                height: 30px;
+                top: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
+    
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center">
+                    <img src="assets/logo1000.png" alt="TheLittleDev Logo" class="w-20 h-20 rounded-full mr-3">
+                    <span class="text-xl font-bold">TheLittleDev</span>
+                </a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#about" class="text-gray-300 hover:text-white transition duration-300">About</a>
+                    <a href="#donate" class="text-gray-300 hover:text-white transition duration-300">Support</a>
+                    <a href="#impact" class="text-gray-300 hover:text-white transition duration-300">Impact</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition duration-300">Contact</a>
+                </div>
+                <a href="#donate" class="btn-primary hidden md:inline-block px-4 py-2 rounded-full text-white font-bold text-sm shadow-lg">
+                    Support Now
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Three.js Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Background Blobs -->
+    <div class="blob" style="top: 20%; left: 10%;"></div>
+    <div class="blob" style="top: 60%; right: 5%;"></div>
+    
+    <!-- Hero Section with Parallax Effect -->
+    <header id="hero" class="relative min-h-screen flex items-center justify-center px-4 py-16 hero-section">
+        <div class="parallax-layer layer-1">
+            <div class="hero-shape top-10 left-1/4"></div>
+            <div class="hero-shape bottom-10 right-1/4"></div>
+        </div>
+        <div class="parallax-layer layer-2">
+            <div class="blob" style="top: 30%; right: 15%;"></div>
+            <div class="blob" style="bottom: 30%; left: 20%;"></div>
+        </div>
+        <div class="parallax-layer layer-3">
+            <div class="container mx-auto text-center z-10">
+                <!-- 3D Rotating Logo -->
+                <div class="logo-3d-container mb-8">
+                    <div class="logo-3d">
+                        <div class="logo-face logo-front">
+                            <div class="text-dark font-bold text-3xl">.</div>
+                        </div>
+                        <div class="logo-face logo-back">
+                            <div class="text-white font-bold text-3xl">.</div>
+                            <div class="text-white font-bold text-3xl">.</div>
+                            <div class="text-white font-bold text-3xl">.</div>
+                            <div class="text-white font-bold text-3xl">.</div>
+                        </div>
+                        <div class="logo-face logo-right"></div>
+                        <div class="logo-face logo-left"></div>
+                        <div class="logo-face logo-top"></div>
+                        <div class="logo-face logo-bottom"></div>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 reveal-element">Support <span class="gradient-text">TheLittleDev</span></h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto reveal-element animate-delay-1">Help fund the future of innovative development and open-source projects</p>
+                
+                <div class="mb-12 reveal-element animate-delay-2">
+                    <div class="progress-bar w-full max-w-lg mx-auto mb-2">
+                        <div class="progress-fill">
+                            <div class="progress-glow"></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-400 max-w-lg mx-auto">
+                        <span>$0</span>
+                        <span class="text-white font-medium">$<span class="counter-value" data-value="6500">0</span> raised of $10,000 goal</span>
+                        <span>$10K</span>
+                    </div>
+                </div>
+
+               
+                
+                <a href="#donate" class="btn-primary inline-block px-8 py-4 rounded-full text-white font-bold text-lg shadow-lg reveal-element animate-delay-3">
+                    Support Now
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-70 hidden z-50 flex items-center justify-center backdrop-blur-sm transition-all duration-300">
+        <div class="bg-darker p-8 rounded-xl shadow-2xl max-w-md w-full mx-4 relative border border-gray-700 glow-border transform transition-all duration-300">
+            <button class="modal-close absolute top-4 right-4 text-gray-400 hover:text-white hover:scale-110 transition-all duration-200">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="text-2xl font-bold mb-6 text-center gradient-text">Choose Payment Method</h2>
+            
+            <!-- Payment Amount Input -->
+            <div class="mb-6">
+                <label for="donation-amount" class="block text-sm font-medium text-gray-300 mb-2">Donation Amount ($)</label>
+                <input type="number" id="donation-amount" class="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200" min="1" step="1" value="50" required>
+            </div>
+
+            <!-- Payment Method Tabs -->
+            <div class="mb-6">
+                <div class="flex space-x-4 mb-4">
+                    <button class="payment-method-btn flex-1 py-3 px-4 rounded-lg bg-gray-800 text-white hover:bg-primary transition-all duration-200 flex items-center justify-center active">
+                        <i class="far fa-credit-card mr-2"></i> Stripe
+                    </button>
+                    <button class="payment-method-btn flex-1 py-3 px-4 rounded-lg bg-gray-800 text-white hover:bg-primary transition-all duration-200 flex items-center justify-center">
+                        <i class="fab fa-paypal mr-2"></i> PayPal
+                    </button>
+                </div>
+
+                <!-- Stripe Payment Form -->
+                <form id="stripe-payment-form" class="payment-method-content">
+                    <!-- Stripe Checkout Button -->
+                    <button type="button" id="checkout-button" class="w-full py-3 px-4 rounded-lg bg-primary hover:bg-primary-dark transition-all duration-200 text-white font-medium mb-4 transform hover:scale-102 hover:shadow-lg flex items-center justify-center">
+                        <i class="fab fa-stripe mr-2"></i> Checkout with Stripe
+                    </button>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </form>
+
+                <!-- PayPal Button Container -->
+                <div id="paypal-button-container" class="payment-method-content hidden">
+                    <div id="paypal-errors" class="text-red-500 text-sm mb-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- About Section with Scroll Animation -->
+    <section id="about" class="py-20 px-4 relative reveal-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center reveal-element">
+                About <span class="gradient-text">TheLittleDev</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="reveal-slide-left">
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">Who Am I?</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        I'm a passionate developer focused on creating tools and applications that make a difference. With over 5 years of experience in full-stack development, I've contributed to numerous open-source projects and built solutions that help thousands of users daily.
+                    </p>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        My work spans web development, mobile applications, and innovative tools for developers. By supporting me, you're directly contributing to the continued development of free resources for the community.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 mt-8">
+                        <div class="bg-gray-800 px-4 py-3 rounded-lg flex items-center">
+                            <i class="fas fa-code text-blue-400 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-medium"><span class="counter-value" data-value="10">0</span>+ Projects</h4>
+                                <p class="text-sm text-gray-400">Open-source contributions</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 px-4 py-3 rounded-lg flex items-center">
+                            <i class="fas fa-users text-green-400 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-medium"><span class="counter-value" data-value="5000">0</span>+ Users</h4>
+                                <p class="text-sm text-gray-400">Using my applications</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-800 px-4 py-3 rounded-lg flex items-center">
+                            <i class="fas fa-star text-yellow-400 mr-3 text-xl"></i>
+                            <div>
+                                <h4 class="font-medium"><span class="counter-value" data-value="500">0</span>+ Stars</h4>
+                                <p class="text-sm text-gray-400">On GitHub repositories</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-8 glow-border reveal-slide-right">
+                    <div class="card-content">
+                        <h3 class="text-2xl font-bold mb-6">Current Projects</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start project-card">
+                                <div class="bg-blue-500 bg-opacity-20 p-3 rounded-lg mr-4 project-icon">
+                                    <i class="fas fa-laptop-code text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-lg">DevTools Pro</h4>
+                                    <p class="text-gray-400">A suite of productivity tools for developers to streamline workflows.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start project-card">
+                                <div class="bg-green-500 bg-opacity-20 p-3 rounded-lg mr-4 project-icon">
+                                    <i class="fas fa-mobile-alt text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-lg">CodeCompanion App</h4>
+                                    <p class="text-gray-400">Mobile app for learning coding on the go with interactive exercises.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start project-card">
+                                <div class="bg-purple-500 bg-opacity-20 p-3 rounded-lg mr-4 project-icon">
+                                    <i class="fas fa-server text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-lg">ServerGuard</h4>
+                                    <p class="text-gray-400">Open-source security monitoring solution for web applications.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Donation Tiers Section with 3D Cards -->
+    <section id="donate" class="py-20 px-4 bg-gray-900 relative reveal-section">
+        <div class="blob" style="bottom: 10%; left: 20%;"></div>
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal-element">
+                Support My <span class="gradient-text">Work</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto reveal-element animate-delay-1">
+                Your support enables me to continue creating and improving tools that help developers worldwide. Choose a support tier or customize your donation.
+            </p>
+            
+            <div class="flex items-center justify-center mb-12 reveal-element animate-delay-2">
+                <span class="mr-3 text-gray-300">One-time</span>
+                <div>
+                    <input type="checkbox" id="donation-type" class="toggle-checkbox" onchange="toggleRecurring()">
+                    <label for="donation-type" class="toggle-label">
+                        <span class="toggle-button"></span>
+                    </label>
+                </div>
+                <span class="ml-3 text-gray-300">Monthly</span>
+                <span class="ml-2 bg-blue-500 text-xs px-2 py-1 rounded-full text-white">Save 10%</span>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- Basic Tier -->
+                <div class="tier-card card p-8 text-center reveal-element animate-delay-1">
+                    <div class="tier-content">
+                        <div class="bg-blue-500 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-coffee text-blue-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Coffee Support</h3>
+                        <div class="text-3xl font-bold mb-4">
+                            <span class="one-time-price">$5</span>
+                            <span class="monthly-price hidden">$4.5</span>
+                            <span class="text-gray-400 text-lg font-normal monthly-price hidden">/mo</span>
+                        </div>
+                        <ul class="text-gray-300 mb-8 space-y-3">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Name in supporters list</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Support future updates</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> My eternal gratitude</li>
+                        </ul>
+                        <button class="btn-primary w-full py-3 rounded-lg font-medium" onclick="selectTier('basic')">
+                            Select
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Pro Tier -->
+                <div class="tier-card card p-8 text-center popular reveal-element animate-delay-2">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                        Most Popular
+                    </div>
+                    <div class="tier-content">
+                        <div class="bg-purple-500 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-rocket text-purple-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Code Champion</h3>
+                        <div class="text-3xl font-bold mb-4">
+                            <span class="one-time-price">$25</span>
+                            <span class="monthly-price hidden">$22.5</span>
+                            <span class="text-gray-400 text-lg font-normal monthly-price hidden">/mo</span>
+                        </div>
+                        <ul class="text-gray-300 mb-8 space-y-3">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Everything in Coffee Support</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Early access to new features</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Discord community access</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Monthly dev updates newsletter</li>
+                        </ul>
+                        <button class="btn-primary w-full py-3 rounded-lg font-medium" onclick="selectTier('pro')">
+                            Select
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Premium Tier -->
+                <div class="tier-card card p-8 text-center reveal-element animate-delay-3">
+                    <div class="tier-content">
+                        <div class="bg-yellow-500 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-crown text-yellow-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Dev Hero</h3>
+                        <div class="text-3xl font-bold mb-4">
+                            <span class="one-time-price">$100</span>
+                            <span class="monthly-price hidden">$90</span>
+                            <span class="text-gray-400 text-lg font-normal monthly-price hidden">/mo</span>
+                        </div>
+                        <ul class="text-gray-300 mb-8 space-y-3">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Everything in Code Champion</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> 1-on-1 video call (30 min)</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Feature request priority</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Name in contributor credits</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i> Exclusive Discord role</li>
+                        </ul>
+                        <button class="btn-primary w-full py-3 rounded-lg font-medium" onclick="selectTier('premium')">
+                            Select
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custom Donation -->
+            <div class="card p-8 max-w-2xl mx-auto mb-16 reveal-element">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold mb-6 text-center">Custom Amount</h3>
+                    <div class="flex flex-col md:flex-row gap-6 mb-8">
+                        <div class="flex-1">
+                            <label class="block text-gray-400 mb-2 text-sm">Amount (USD)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
+                                <input type="number" id="custom-amount" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-8 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" value="50" min="1" step="1">
+                            </div>
+                        </div>
+                        
+                        <div class="flex-1">
+                            <label class="block text-gray-400 mb-2 text-sm">Payment Method</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 flex justify-center items-center cursor-pointer payment-option active" data-method="stripe" onclick="selectPayment('stripe')">
+                                    <i class="fab fa-stripe text-2xl text-white mr-2"></i>
+                                    <span>Stripe</span>
+                                </div>
+                                <div class="bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 flex justify-center items-center cursor-pointer payment-option" data-method="paypal" onclick="selectPayment('paypal')">
+                                    <i class="fab fa-paypal text-2xl text-blue-400 mr-2"></i>
+                                    <span>PayPal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-800 p-4 rounded-lg mb-8">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Donation amount</span>
+                            <span id="summary-amount">$50.00</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2 recurring-info hidden">
+                            <span class="text-gray-400">Billing</span>
+                            <span>Monthly (saves 10%)</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Payment method</span>
+                            <span id="summary-method">Stripe</span>
+                        </div>
+                        <hr class="border-gray-700 my-2">
+                        <div class="flex justify-between items-center font-bold">
+                            <span>Total</span>
+                            <span id="summary-total">$50.00</span>
+                        </div>
+                    </div>
+                    
+                    <button id="donate-button" class="btn-primary w-full py-4 rounded-lg font-bold text-lg">
+                        Donate Now
+                    </button>
+                    
+                    <div class="text-center mt-4 text-sm text-gray-400">
+                        <i class="fas fa-lock mr-1"></i> Secure payment processing via Stripe/PayPal
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Impact Section with Scroll Animation -->
+    <section id="impact" class="py-20 px-4 relative reveal-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal-element">
+                Your Support <span class="gradient-text">Makes a Difference</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto reveal-element animate-delay-1">
+                Here's how your donations help me continue developing tools and resources for the community.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-8 reveal-element">
+                    <div class="card-content">
+                        <div class="bg-blue-500 bg-opacity-20 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
+                            <i class="fas fa-laptop-code text-blue-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Development Time</h3>
+                        <p class="text-gray-300">
+                            Your support allows me to dedicate more time to building and improving the tools you love, ensuring they stay updated and bug-free.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card p-8 reveal-element animate-delay-1">
+                    <div class="card-content">
+                        <div class="bg-green-500 bg-opacity-20 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
+                            <i class="fas fa-server text-green-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Infrastructure Costs</h3>
+                        <p class="text-gray-300">
+                            Hosting services, domain names, APIs, and development tools all come with costs. Your donations help keep these services running.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card p-8 reveal-element animate-delay-2">
+                    <div class="card-content">
+                        <div class="bg-purple-500 bg-opacity-20 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6">
+                            <i class="fas fa-lightbulb text-purple-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">New Features</h3>
+                        <p class="text-gray-300">
+                            Donations enable me to research and implement new features and tools that further enhance the developer experience.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section with 3D cards -->
+    <section class="py-20 px-4 bg-gray-900 relative reveal-section">
+        <div class="container mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal-element">
+                What <span class="gradient-text">Supporters Say</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto reveal-element animate-delay-1">
+                Join the amazing community of people who have already supported TheLittleDev
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card p-6 reveal-element">
+                    <div class="card-content">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-xl font-bold">M</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Michael S.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            "The DevTools Pro has saved me countless hours of work. Supporting TheLittleDev was one of the best investments I've made for my development workflow."
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card p-6 reveal-element animate-delay-1">
+                    <div class="card-content">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-xl font-bold">J</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Jennifer L.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            "As a junior developer, the resources provided have been invaluable for my learning journey. I'm happy to support such amazing work!"
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="card p-6 reveal-element animate-delay-2">
+                    <div class="card-content">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                <span class="text-xl font-bold">R</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Ryan T.</h4>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">
+                            "The ServerGuard project solved a major security issue we were facing in our app. I'm a monthly supporter now because this work deserves to continue."
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Supporters with 3D Effect -->
+            <div class="mt-16 text-center reveal-element animate-delay-3">
+                <h3 class="text-xl font-bold mb-6">Recent Supporters</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Alex K. - $25</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Sarah M. - $100</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">David P. - $50</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Emma J. - $10</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Carlos R. - $75</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Nina S. - $20</span>
+                    </div>
+                    <div class="bg-gray-800 px-4 py-2 rounded-full hover:transform hover:scale-105 transition-all cursor-default">
+                        <span class="text-sm">Tom B. - $15</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ Section with Animated Accordions -->
+    <section class="py-20 px-4 relative reveal-section">
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal-element">
+                Frequently Asked <span class="gradient-text">Questions</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto reveal-element animate-delay-1">
+                Everything you need to know about supporting TheLittleDev
+            </p>
+            
+            <div class="space-y-6" id="faq-accordion">
+                <!-- FAQ Item 1 -->
+                <div class="card p-6 faq-item reveal-element">
+                    <div class="card-content">
+                        <button class="flex justify-between items-center w-full text-left font-medium text-lg focus:outline-none" onclick="toggleFaq(1)">
+                            <span>Where does my donation go?</span>
+                            <i class="fas fa-chevron-down transition-transform faq-icon-1"></i>
+                        </button>
+                        <div class="faq-content-1 hidden mt-4 text-gray-300">
+                            <p>Your donations directly support the development and maintenance of open-source projects. This includes server costs, development tools, research time, and enabling me to dedicate more hours to creating and improving the projects you love. Every contribution, no matter how small, makes a significant difference.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="card p-6 faq-item reveal-element animate-delay-1">
+                    <div class="card-content">
+                        <button class="flex justify-between items-center w-full text-left font-medium text-lg focus:outline-none" onclick="toggleFaq(2)">
+                            <span>Is my payment secure?</span>
+                            <i class="fas fa-chevron-down transition-transform faq-icon-2"></i>
+                        </button>
+                        <div class="faq-content-2 hidden mt-4 text-gray-300">
+                            <p>Absolutely! All payments are processed securely through Stripe or PayPal, both industry leaders in payment processing security. Your payment information never passes through our servers, and all transactions are encrypted using the latest security standards.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="card p-6 faq-item reveal-element animate-delay-2">
+                    <div class="card-content">
+                        <button class="flex justify-between items-center w-full text-left font-medium text-lg focus:outline-none" onclick="toggleFaq(3)">
+                            <span>How do monthly subscriptions work?</span>
+                            <i class="fas fa-chevron-down transition-transform faq-icon-3"></i>
+                        </button>
+                        <div class="faq-content-3 hidden mt-4 text-gray-300">
+                            <p>Monthly subscriptions are convenient recurring donations that help provide stable support. You'll be charged the same amount each month until you decide to cancel. You can cancel at any time from your Stripe or PayPal account with no questions asked. Monthly supporters enjoy a 10% discount compared to one-time donations of the same amount.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="card p-6 faq-item reveal-element animate-delay-2">
+                    <div class="card-content">
+                        <button class="flex justify-between items-center w-full text-left font-medium text-lg focus:outline-none" onclick="toggleFaq(4)">
+                            <span>Can I get a refund?</span>
+                            <i class="fas fa-chevron-down transition-transform faq-icon-4"></i>
+                        </button>
+                        <div class="faq-content-4 hidden mt-4 text-gray-300">
+                            <p>While donations are generally non-refundable as they immediately go toward supporting development work, I want you to be happy with your contribution. If you have concerns about your donation, please contact me directly and I'll do my best to address your situation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="card p-6 faq-item reveal-element animate-delay-3">
+                    <div class="card-content">
+                        <button class="flex justify-between items-center w-full text-left font-medium text-lg focus:outline-none" onclick="toggleFaq(5)">
+                            <span>Do I get special perks for donating?</span>
+                            <i class="fas fa-chevron-down transition-transform faq-icon-5"></i>
+                        </button>
+                        <div class="faq-content-5 hidden mt-4 text-gray-300">
+                            <p>Yes! Depending on your donation tier, you may receive benefits like early access to new features, Discord community access, monthly newsletters, feature request priority, or even 1-on-1 calls. Check the donation tiers above for specific perks associated with each level of support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4 bg-gray-900 relative reveal-section">
+        <div class="blob" style="top: 30%; right: 10%;"></div>
+        <div class="container mx-auto max-w-4xl">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-center reveal-element">
+                Get in <span class="gradient-text">Touch</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16 max-w-2xl mx-auto reveal-element animate-delay-1">
+                Have questions or want to connect? Reach out through any of these channels.
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <a href="mailto:contact@thelittledev.com" class="card p-8 text-center hover:bg-gray-800 transition duration-300 reveal-element">
+                    <div class="card-content">
+                        <div class="bg-blue-500 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-envelope text-blue-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Email</h3>
+                        <p class="text-gray-300">contact@thelittledev.com</p>
+                    </div>
+                </a>
+                
+                <a href="https://twitter.com/thelittledev" target="_blank" class="card p-8 text-center hover:bg-gray-800 transition duration-300 reveal-element animate-delay-1">
+                    <div class="card-content">
+                        <div class="bg-blue-400 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fab fa-twitter text-blue-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Twitter</h3>
+                        <p class="text-gray-300">@thelittledev</p>
+                    </div>
+                </a>
+                
+                <a href="https://github.com/thelittledev" target="_blank" class="card p-8 text-center hover:bg-gray-800 transition duration-300 reveal-element animate-delay-2">
+                    <div class="card-content">
+                        <div class="bg-gray-500 bg-opacity-20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fab fa-github text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">GitHub</h3>
+                        <p class="text-gray-300">github.com/thelittledev</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="mt-16 card p-8 reveal-element animate-delay-3">
+                <div class="card-content">
+                    <h3 class="text-xl font-bold mb-6 text-center">Send a Message</h3>
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-400 mb-2 text-sm">Name</label>
+                                <input type="text" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 mb-2 text-sm">Email</label>
+                                <input type="email" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-2 text-sm">Subject</label>
+                            <input type="text" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-2 text-sm">Message</label>
+                            <textarea rows="4" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 rounded-lg font-medium">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer with 3D effect -->
+    <footer class="py-10 px-4 bg-gray-900 border-t border-gray-800 reveal-section">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 reveal-element">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3">
+                            <div class="text-dark font-bold text-xs">TLD</div>
+                        </div>
+                        <span class="text-2xl font-bold">TheLittleDev</span>
+                    </div>
+                    <p class="text-gray-400 mt-2">Supporting the future of development</p>
+                </div>
+                
+                <div class="flex space-x-4 reveal-element animate-delay-1">
+                    <a href="https://twitter.com/thelittledev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-500 transition duration-300 transform hover:scale-110">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://github.com/thelittledev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-600 transition duration-300 transform hover:scale-110">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/thelittledev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-700 transition duration-300 transform hover:scale-110">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://youtube.com/thelittledev" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-600 transition duration-300 transform hover:scale-110">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm mb-4 md:mb-0 reveal-element">
+                    &copy; 2023 TheLittleDev. All rights reserved.
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-4 text-sm reveal-element animate-delay-1">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Popup Message with 3D effect -->
+    <div id="popup" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-70" onclick="closePopup()"></div>
+        <div class="bg-gray-900 rounded-lg p-8 max-w-md w-full relative z-10 border border-gray-700 transform transition-all duration-300 scale-0" id="popup-content">
+            <button class="absolute top-4 right-4 text-gray-400 hover:text-white" onclick="closePopup()">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-500 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-400 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Thank You!</h3>
+                <p class="text-gray-300">Your donation will help support the ongoing development of valuable tools for the developer community.</p>
+            </div>
+            <button class="btn-primary w-full py-3 rounded-lg font-medium" onclick="closePopup()">
+                Continue
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Three.js background
+        let scene, camera, renderer, stars = [];
+        
+        function initThree() {
+            // Create scene
+            scene = new THREE.Scene();
+            
+            // Set up camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Set up renderer
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('bg-canvas'),
+                alpha: true,
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Create stars
+            const geometry = new THREE.SphereGeometry(0.1, 24, 24);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            
+            for(let i = 0; i < 200; i++) {
+                const star = new THREE.Mesh(geometry, material);
+                
+                const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+                star.position.set(x, y, z);
+                scene.add(star);
+                stars.push(star);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            // Start animation loop
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate stars slightly
+            stars.forEach(star => {
+                star.rotation.x += 0.001;
+                star.rotation.y += 0.001;
+            });
+            
+            // Move camera based on mouse position
+            if (mousePosition) {
+                camera.position.x += (mousePosition.x * 0.01 - camera.position.x) * 0.01;
+                camera.position.y += (-mousePosition.y * 0.01 - camera.position.y) * 0.01;
+                camera.lookAt(scene.position);
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Track mouse position for parallax effect
+        let mousePosition = { x: 0, y: 0 };
+        
+        document.addEventListener('mousemove', (e) => {
+            mousePosition = {
+                x: (e.clientX - window.innerWidth / 2),
+                y: (e.clientY - window.innerHeight / 2)
+            };
+            
+            // Update parallax layers
+            const layers = document.querySelectorAll('.parallax-layer');
+            layers.forEach((layer, index) => {
+                const depth = index * 0.2;
+                const moveX = (mousePosition.x * depth) * 0.05;
+                const moveY = (mousePosition.y * depth) * 0.05;
+                layer.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${1 + index * 0.1})`;
+            });
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position, size and delay
+                const size = Math.random() * 6 + 2;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 20 + 10;
+                const translateX = (Math.random() - 0.5) * 200;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.bottom = '-20px';
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.setProperty('--tx', `${translateX}px`);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize GSAP and ScrollTrigger
+        function initGSAP() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Animated scrolling background
+            gsap.to('body', {
+                backgroundPosition: '100% 100%',
+                scrollTrigger: {
+                    trigger: 'body',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: true
+                }
+            });
+            
+            // Scroll progress indicator
+            gsap.to('.scroll-progress', {
+                width: '100%',
+                scrollTrigger: {
+                    trigger: 'body',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: true
+                }
+            });
+            
+            // Progress bar animation
+            gsap.to('.progress-fill', {
+                width: '65%',
+                duration: 2,
+                ease: 'power2.out',
+                delay: 0.5
+            });
+            
+            // Sticky navigation
+            ScrollTrigger.create({
+                trigger: '#hero',
+                start: 'bottom top',
+                onEnter: () => document.querySelector('.sticky-nav').classList.add('visible'),
+                onLeaveBack: () => document.querySelector('.sticky-nav').classList.remove('visible')
+            });
+            
+            // Setup scroll reveal animations
+            const revealElements = document.querySelectorAll('.reveal-element');
+            revealElements.forEach(element => {
+                gsap.set(element, { y: 50, opacity: 0 });
+                
+                ScrollTrigger.create({
+                    trigger: element,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        gsap.to(element, {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: 'power2.out'
+                        });
+                    },
+                    once: true
+                });
+            });
+            
+            // Slide-in animations
+            const slideLeftElements = document.querySelectorAll('.reveal-slide-left');
+            slideLeftElements.forEach(element => {
+                gsap.set(element, { x: -100, opacity: 0 });
+                
+                ScrollTrigger.create({
+                    trigger: element,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        gsap.to(element, {
+                            x: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: 'power2.out'
+                        });
+                    },
+                    once: true
+                });
+            });
+            
+            const slideRightElements = document.querySelectorAll('.reveal-slide-right');
+            slideRightElements.forEach(element => {
+                gsap.set(element, { x: 100, opacity: 0 });
+                
+                ScrollTrigger.create({
+                    trigger: element,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        gsap.to(element, {
+                            x: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: 'power2.out'
+                        });
+                    },
+                    once: true
+                });
+            });
+            
+            // Counter animations
+            const counters = document.querySelectorAll('.counter-value');
+            counters.forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-value'));
+                
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: 'top 80%',
+                    onEnter: () => {
+                        gsap.to(counter, {
+                            innerText: target,
+                            duration: 2,
+                            snap: { innerText: 1 },
+                            ease: 'power2.out'
+                        });
+                    },
+                    once: true
+                });
+            });
+            
+            // Project card hover effects
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 20;
+                    const rotateY = (centerX - x) / 20;
+                    
+                    gsap.to(card, {
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        transformPerspective: 1000,
+                        duration: 0.5,
+                        ease: 'power1.out'
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotateX: 0,
+                        rotateY: 0,
+                        duration: 0.5,
+                        ease: 'power1.out'
+                    });
+                });
+            });
+            
+            // Donation tier card hover effects
+            const tierCards = document.querySelectorAll('.tier-card');
+            tierCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 30;
+                    const rotateY = (centerX - x) / 30;
+                    
+                    gsap.to(card, {
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        transformPerspective: 1000,
+                        duration: 0.5,
+                        ease: 'power1.out'
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotateX: 0,
+                        rotateY: 0,
+                        duration: 0.5,
+                        ease: 'power1.out'
+                    });
+                });
+            });
+        }
+        
+        // Toggle FAQ item
+        function toggleFaq(id) {
+            const content = document.querySelector(`.faq-content-${id}`);
+            const icon = document.querySelector(`.faq-icon-${id}`);
+            
+            if (content.classList.contains('hidden')) {
+                // Opening
+                content.classList.remove('hidden');
+                gsap.from(content, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+                icon.classList.add('transform', 'rotate-180');
+            } else {
+                // Closing
+                gsap.to(content, {
+                    height: 0,
+                    opacity: 0,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        content.classList.add('hidden');
+                        content.style.height = '';
+                        content.style.opacity = '';
+                    }
+                });
+                icon.classList.remove('transform', 'rotate-180');
+            }
+        }
+        
+        // Toggle between one-time and recurring donation
+        function toggleRecurring() {
+            const isRecurring = document.getElementById('donation-type').checked;
+            const oneTimePrices = document.querySelectorAll('.one-time-price');
+            const monthlyPrices = document.querySelectorAll('.monthly-price');
+            const recurringInfo = document.querySelector('.recurring-info');
+            
+            if (isRecurring) {
+                oneTimePrices.forEach(el => el.classList.add('hidden'));
+                monthlyPrices.forEach(el => el.classList.remove('hidden'));
+                recurringInfo.classList.remove('hidden');
+            } else {
+                oneTimePrices.forEach(el => el.classList.remove('hidden'));
+                monthlyPrices.forEach(el => el.classList.add('hidden'));
+                recurringInfo.classList.add('hidden');
+            }
+            
+            updateSummary();
+        }
+        
+        // Select donation tier
+        function selectTier(tier) {
+            let amount;
+            
+            switch(tier) {
+                case 'basic':
+                    amount = 5;
+                    break;
+                case 'pro':
+                    amount = 25;
+                    break;
+                case 'premium':
+                    amount = 100;
+                    break;
+                default:
+                    amount = 5;
+            }
+            
+            document.getElementById('custom-amount').value = amount;
+            updateSummary();
+            
+            // Scroll to custom amount section with smooth animation
+            gsap.to(window, {
+                duration: 1,
+                scrollTo: {
+                    y: document.getElementById('custom-amount'),
+                    offsetY: 100
+                },
+                ease: 'power2.inOut'
+            });
+        }
+        
+        // Select payment method
+        function selectPayment(method) {
+            const options = document.querySelectorAll('.payment-option');
+            options.forEach(option => {
+                option.classList.remove('active');
+                option.classList.remove('border-blue-500');
+            });
+            
+            const selected = document.querySelector(`[data-method="${method}"]`);
+            selected.classList.add('active');
+            selected.classList.add('border-blue-500');
+            
+            document.getElementById('summary-method').textContent = method === 'stripe' ? 'Stripe' : 'PayPal';
+        }
+        
+        // Update summary
+        function updateSummary() {
+            const amount = parseFloat(document.getElementById('custom-amount').value) || 0;
+            const isRecurring = document.getElementById('donation-type').checked;
+            let total = amount;
+            
+            if (isRecurring) {
+                total = amount * 0.9; // 10% discount
+            }
+            
+            document.getElementById('summary-amount').textContent = `$${amount.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+        }
+        
+        // Show popup with animation
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popup-content');
+            
+            popup.classList.remove('hidden');
+            
+            gsap.to(popupContent, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.5,
+                ease: 'back.out(1.5)'
+            });
+            
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Close popup with animation
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popup-content');
+            
+            gsap.to(popupContent, {
+                scale: 0,
+                opacity: 0,
+                duration: 0.3,
+                ease: 'power2.in',
+                onComplete: () => {
+                    popup.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+        
+        // Smooth scroll to anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const target = document.querySelector(targetId);
+                
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: {
+                            y: target,
+                            offsetY: 50
+                        },
+                        ease: 'power2.inOut'
+                    });
+                }
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create particles
+            createParticles();
+            
+            // Initialize Three.js background
+            initThree();
+            
+            // Initialize GSAP animations
+            initGSAP();
+            
+            // Set up event listeners
+            document.getElementById('custom-amount').addEventListener('input', updateSummary);
+            document.getElementById('donate-button').addEventListener('click', function() {
+                // Get the donation amount from the summary and set it in the payment modal
+                const donationAmount = document.getElementById('summary-total').textContent.replace('$', '');
+                document.getElementById('donation-amount').value = parseFloat(donationAmount);
+                
+                // Get the selected payment method and show it in the payment modal
+                const selectedMethod = document.getElementById('summary-method').textContent.toLowerCase();
+                
+                // Show the payment modal
+                document.getElementById('payment-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                
+                // Show the appropriate payment method tab
+                showPaymentMethod(selectedMethod === 'stripe' ? 'stripe' : 'paypal');
+            });
+            
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Message sent successfully! (This is a demo - no actual message was sent)');
+                e.target.reset();
+            });
+            
+            // Make reveal elements active by default for PDF export
+            document.querySelectorAll('.reveal-element, .reveal-slide-left, .reveal-slide-right, .reveal-scale').forEach(el => {
+                el.classList.add('active');
+            });
+            
+            // Animate progress bar
+            document.querySelector('.progress-fill').style.width = '65%';
+            
+            // Initialize counter values
+            document.querySelectorAll('.counter-value').forEach(counter => {
+                const target = parseFloat(counter.getAttribute('data-value'));
+                counter.textContent = target;
+            });
+        });
+    </script>
+    <!-- Payment Integration Script already included in head -->
+    <script>
+        // Payment method switcher is already defined in the head section
+    </script>
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <div class="bg-darker p-8 rounded-xl shadow-2xl max-w-md w-full mx-4 relative border border-gray-700">
+            <button class="modal-close absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <h2 class="text-2xl font-bold mb-6 gradient-text">Support TheLittleDev</h2>
+            
+            <!-- Payment Method Selection -->
+            <div class="flex space-x-4 mb-6">
+                <button id="stripe-method-btn" class="flex-1 py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                    <i class="fab fa-stripe mr-2"></i> Stripe
+                </button>
+                <button id="paypal-method-btn" class="flex-1 py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                    <i class="fab fa-paypal mr-2"></i> PayPal
+                </button>
+            </div>
+            
+            <!-- Donation Amount Input -->
+            <div class="mb-6">
+                <label for="donation-amount" class="block text-sm font-medium text-gray-300 mb-2">Donation Amount ($)</label>
+                <input type="number" id="donation-amount" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter amount" min="1" step="0.01" required>
+            </div>
+            
+            <!-- Stripe Payment Form -->
+            <form id="stripe-payment-form" class="hidden">
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                    <input type="text" id="name" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                    <input type="email" id="email" class="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="card-element" class="block text-sm font-medium text-gray-300 mb-2">Card Details</label>
+                    <div id="card-element" class="p-4 rounded-lg bg-gray-800 border border-gray-700"></div>
+                    <div id="card-errors" class="text-red-500 text-sm mt-2"></div>
+                </div>
+                
+                <button type="submit" id="checkout-button" class="w-full py-3 px-4 rounded-lg bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                    <i class="fab fa-stripe mr-2"></i> Checkout with Stripe
+                </button>
+            </form>
+            
+            <!-- PayPal Button Container -->
+            <div id="paypal-button-container" class="hidden">
+                <div id="paypal-errors" class="text-red-500 text-sm mb-4"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
